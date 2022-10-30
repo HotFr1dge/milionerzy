@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+  <head>
+
+     <meta charset="utf-8">
+     <title>Milionerzy - INF. 02 EGZAMIN</title>
+     <link rel="icon" type="image/webp" href="./assets/images/icon.webp">
+     
+     <meta name="description" content="Opis zawartości strony dla wyszukiwarek">
+     <meta name="keywords" content="słowa, kluczowe, opisujące, zawartość">
+     <meta name="author" content="Mateusz Skórka">
+
+     <meta http-equiv="X-Ua-Compatible" content="IE=edge,chrome=1">
+     <link rel="stylesheet" href="./assets/stylesheets/main.css">
+
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  </head>
+  <body>
+
+      <div id="overlay">KLIKNIJ ABY ROZPOCZĄĆ</div>
+
+      <div id="game-rules">
+        <img src="./assets/images/icon.webp" id="sLogo" class="hide" width="25%">
+        <h1 id="text-logo" class="hide">MILIONERZY</h1>
+        <span>KLIKNIJ ABY ZAGRAĆ</span>
+      </div>
+
+      <div id="lets-play">
+        <h1 id="lets-play-text">Zaczynamy!</h1>
+      </div>
+
+      <div id="main-container">
+
+        <img id="logo" src="./assets/images/icon.webp" width="150px">
+
+        <div class="question-container">
+          <div class="question" id="question">Treść pytania.</div>
+          <img id="zalacznik" src="" class="hide">
+          <div class="answear-container">
+            <div class="answear" id="odpa">
+              A. odpowiedź
+            </div>
+            <div class="answear" id="odpb">
+              A. odpowiedź
+            </div>
+            <div class="answear" id="odpc">
+              A. odpowiedź
+            </div>
+            <div class="answear" id="odpd">
+              A. odpowiedź
+            </div>
+          </div>
+          <div id="next-question" class="hide">🡺</div>
+        </div>
+
+        <div class="timer-container hide">
+          0:<span id="timer">00</span>
+        </div>
+
+        <div class="steps-wrapper" id="steps">
+          <div class="wheels">
+            <div id="voting"><span class="icon-loop-alt2"></span></div>
+            <div id="half"><span class="i-5050">50:50</span></div>
+            <div id="phone"><span class="icon-phone1"></span></div>
+          </div>
+          <div class="money"></div>
+          <div class="money save">1 000 000</div>
+          <div class="money">500 000</div>
+          <div class="money">250 000</div>
+          <div class="money">125 000</div>
+          <div class="money">75 000</div>
+          <div class="money save">40 000</div>
+          <div class="money">20 000</div>
+          <div class="money">10 000</div>
+          <div class="money">5000</div>
+          <div class="money">2000</div>
+          <div class="money save">1000</div>
+          <div class="money check">500</div>
+        </div>
+      </div>
+
+      <script type="module" src="./assets/javascript/game.js"></script>
+  </body>
+
+</html>

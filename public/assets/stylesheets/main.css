@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+@import url('./animations.css');
+@import url('./font.css');
+
+* {
+	font-family: 'Nunito', sans-serif;
+	user-select: none;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background: rgb(39,50,124);
+	background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(39,50,124,1) 50%, rgba(9,9,121,1) 100%);
+	color: white;
+}
+
+#main-container {
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+}
+
+.steps-wrapper {
+	background-color: rgb(39,50,124);
+	padding: 10px;
+	border-radius: 10px;
+	position: absolute;
+	right: 3vw;
+	top: 100px;
+	width: 15%;
+}
+
+.steps-wrapper > .money {
+	font-size: large;
+	font-weight: bold;
+	color: #faa142;
+	padding: 5px;
+	margin-bottom: 5px;
+	text-align: center;
+	border-radius: 30px;
+}
+
+.check {
+	border: white solid 3px;
+	background-color: rgb(19,30,104)!important;
+}
+
+.save {
+	color: white!important;
+}
+
+#logo {
+	position: absolute;
+	top: 20px;
+	left: 20px;
+}
+
+.question-container {
+	background-color: rgb(39,50,124);
+	position: absolute;
+	left: 25vw;
+	width: 50vw;
+	top: 100px;
+	border-radius: 10px;
+	padding: 5px;
+	text-align: center;
+}
+
+.question {
+	padding: 30px;
+	text-align: center;
+	font-size: 28px;
+	background-color: rgb(19,30,104);
+	border-radius: 5px;
+}
+
+.answear-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+	padding: 5px 0 2.5px 0;
+}
+
+.answear {
+	padding: 10px;
+	background-color: rgb(19,30,104);
+	display: inline-block;
+	border-radius: 15px;
+	flex: calc(50% - 2.5px);
+	box-sizing: border-box;
+	text-align: center;
+	cursor: pointer;
+}
+
+.selected {
+	border: 3px solid white;
+	color: #faa142;
+}
+
+.timer-container {
+	position: absolute;
+	text-align: center;
+	bottom: 100px;
+	left: 100px;
+	font-size: 36px;
+	font-weight: bold;
+}
+
+#overlay {
+	width: 100vw;
+	height: 100vh;
+	background-color: black;
+	text-align: center;
+	padding-top: 30%;
+	font-size: 32px;
+	box-sizing: border-box;
+	position: absolute;
+	z-index: 999;
+}
+
+.hide {
+	display: none!important;
+}
+
+#game-rules {
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	z-index: 899;
+	background: rgb(19,30,104);
+	text-align: center;
+	padding: 100px;
+	box-sizing: border-box;
+}
+
+#text-logo {
+	letter-spacing: 5px;
+	font-size: 72px;
+	font-weight: bold;
+	transition: 0.5s all;
+}
+
+#lets-play {
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	z-index: 799;
+	background: rgb(19,30,104);
+	text-align: center;
+	padding-top: 50vh;
+	box-sizing: border-box;
+}
+
+#zalacznik {
+	height: 50%;
+	max-width: 100%;
+	border-radius: 5px;
+	margin-top: 10px;
+}
+
+.green { 
+	background: green;
+}
+
+.red {
+	background: red;
+}
+
+.wheels > div {
+	font-size: 32px;
+	flex-grow: 1;
+	text-align: center;
+	background-color: rgb(19,30,104);
+	border-radius: 5px;
+	margin: 3px;
+	padding-top: 5px;
+	box-sizing: border-box;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.wheels {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.i-5050 {
+	font-size: 24px;
+}
+
+button {
+	color: white;
+	border-color: white;
+	border-style: solid;
+	border-radius: 3px;
+	padding: 3px;
+	background-color: transparent;
+}
+
+.disabled {
+	background-color: rgb(63, 68, 97)!important;
+	cursor: not-allowed!important;
+}
+
+#next-question {
+	font-size: 24px;
+	padding: 10px;
+	float: right;
+	border-radius: 10px;
+	border: 3px solid white;
+	cursor: pointer;
+	margin: 5px;
+	width: 10%;
+}
+
+.phone-friend {
+	background: transparent!important;
+	padding-top: 10px!important;
+}
