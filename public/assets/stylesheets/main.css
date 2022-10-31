@@ -2,15 +2,23 @@
 @import url('./animations.css');
 @import url('./font.css');
 
+:root {
+	--dark-blue: rgb(19,30,104);
+	--blue: rgb(39,50,124);
+	--grey: rgb(63, 68, 97);
+	--orange: #faa142;
+}
+
 * {
 	font-family: 'Nunito', sans-serif;
+	-webkit-user-select: none;
 	user-select: none;
 }
 
 body {
 	margin: 0;
 	padding: 0;
-	background: rgb(39,50,124);
+	background: var(--blue);
 	background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(39,50,124,1) 50%, rgba(9,9,121,1) 100%);
 	color: white;
 }
@@ -25,7 +33,7 @@ body {
 }
 
 .steps-wrapper {
-	background-color: rgb(39,50,124);
+	background-color: var(--blue);
 	padding: 10px;
 	border-radius: 10px;
 	position: absolute;
@@ -36,7 +44,7 @@ body {
 .steps-wrapper > .money {
 	font-size: large;
 	font-weight: bold;
-	color: #faa142;
+	color: var(--orange);
 	padding: 5px;
 	margin-bottom: 5px;
 	text-align: center;
@@ -45,7 +53,7 @@ body {
 
 .check {
 	border: white solid 3px;
-	background-color: rgb(19,30,104)!important;
+	background-color: var(--dark-blue)!important;
 }
 
 .save {
@@ -59,7 +67,7 @@ body {
 }
 
 .question-container {
-	background-color: rgb(39,50,124);
+	background-color: var(--blue);
 	width: 50vw;
 	border-radius: 10px;
 	padding: 5px;
@@ -70,7 +78,7 @@ body {
 	padding: 30px;
 	text-align: center;
 	font-size: 28px;
-	background-color: rgb(19,30,104);
+	background-color: var(--dark-blue);
 	border-radius: 5px;
 }
 
@@ -83,8 +91,7 @@ body {
 
 .answear {
 	padding: 10px;
-	background-color: rgb(19,30,104);
-	display: inline-block;
+	background-color: var(--dark-blue);
 	border-radius: 15px;
 	flex: calc(50% - 2.5px);
 	box-sizing: border-box;
@@ -94,7 +101,7 @@ body {
 
 .selected {
 	border: 3px solid white;
-	color: #faa142;
+	color: var(--orange);
 }
 
 .timer-container {
@@ -127,7 +134,7 @@ body {
 	height: 100vh;
 	position: absolute;
 	z-index: 899;
-	background: rgb(19,30,104);
+	background: var(--dark-blue);
 	text-align: center;
 	padding: 100px;
 	box-sizing: border-box;
@@ -145,7 +152,7 @@ body {
 	height: 100vh;
 	position: absolute;
 	z-index: 799;
-	background: rgb(19,30,104);
+	background: var(--dark-blue);
 	text-align: center;
 	padding-top: 50vh;
 	box-sizing: border-box;
@@ -170,7 +177,7 @@ body {
 	font-size: 32px;
 	flex-grow: 1;
 	text-align: center;
-	background-color: rgb(19,30,104);
+	background-color: var(--dark-blue);
 	border-radius: 5px;
 	margin: 3px;
 	padding-top: 5px;
@@ -195,10 +202,11 @@ button {
 	border-radius: 3px;
 	padding: 3px;
 	background-color: transparent;
+	cursor: pointer;
 }
 
 .disabled {
-	background-color: rgb(63, 68, 97)!important;
+	background-color: var(--grey)!important;
 	cursor: not-allowed!important;
 }
 

@@ -58,10 +58,8 @@ io.on("connection", (socket) => {
 
 		// discard good answaer and one random
 		let answerArray = ['A', 'B', 'C', 'D'].filter(x => x != rightAnswer.prawidlowa);
-		console.log(answerArray)
 		const randomItem = answerArray[Math.floor(Math.random() * 3)];
 		answerArray = answerArray.filter(x => x != randomItem);
-		console.log(answerArray);
 
 		socket.emit('half', { toDiscard: answerArray });
 	});
