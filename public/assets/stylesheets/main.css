@@ -17,6 +17,9 @@ body {
 
 #main-container {
 	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	width: 100vw;
 	height: 100vh;
 }
@@ -27,7 +30,6 @@ body {
 	border-radius: 10px;
 	position: absolute;
 	right: 3vw;
-	top: 100px;
 	width: 15%;
 }
 
@@ -58,10 +60,7 @@ body {
 
 .question-container {
 	background-color: rgb(39,50,124);
-	position: absolute;
-	left: 25vw;
 	width: 50vw;
-	top: 100px;
 	border-radius: 10px;
 	padding: 5px;
 	text-align: center;
