@@ -1,10 +1,26 @@
 import { socket } from './game.js';
-import { playLow, wrongAnswer, correctAnswer, playMid, playHigh, play75k, play500k, play1m, final_answer, phonefriend } from './sounds.js';
+import { playLow, wrongAnswer, correctAnswer, playMid, playHigh, play75k, play500k, play1m, finalAnswer, phonefriend } from './sounds.js';
 
 let currentID, help, nextStep;
 let availableHelp = ['half', 'phone', 'public'];
 let step = 1;
 let currentAudio = playLow;
+
+// HTMLElements
+const letsPlayElement = document.getElementById('lets-play');
+const letsPlayTextElement = document.getElementById('lets-play-text');
+const nextQuestionElement = document.getElementById('next-question');
+const zalacznikElement = document.getElementById('zalacznik');
+const stepsElement = document.getElementById('steps');
+
+function play(audio) {
+	audio.play();
+}
+
+function stop(audio) {
+	audio.pause();
+	audio.currentTime = 0;
+}
 
 function putQuestionDataIntoHTML(pytanie, odpa, odpb, odpc, odpd, zalacznik) {
 	if (!pytanie || !odpa || !odpb || !odpc || !odpd) return console.error('Nie podano wystarczającej liczby danych!');
@@ -14,7 +30,7 @@ function putQuestionDataIntoHTML(pytanie, odpa, odpb, odpc, odpd, zalacznik) {
 	const b = document.getElementById('odpb');
 	const c = document.getElementById('odpc');
 	const d = document.getElementById('odpd');
-	const o = document.getElementById('zalacznik');
+	const o = zalacznikElement;
 
 	q.innerText = pytanie;
 	a.innerText = odpa;
@@ -41,6 +57,13 @@ export function loadQuestion() {
 	});
 }
 
+function gameOver() {
+	setTimeout(() => {
+		letsPlayElement.classList.remove('hide');
+		letsPlayTextElement.innerHTML = 'KONIEC GRY 😔<br><button onclick="window.location.reload();">ZAGRAJ PONOWNIE</button>';
+	}, 3000);
+}
+
 export function checkAnswer(answerObjectHTML) {
 	if (currentID == null) return;
 	help = false;
@@ -52,21 +75,21 @@ export function checkAnswer(answerObjectHTML) {
 			// next question
 			stop(currentAudio);
 			if (step == 12) {
-				play(final_answer);
+				play(finalAnswer);
 				setTimeout(() => {
 					answerObjectHTML.classList.add('green');
-					stop(final_answer);
+					stop(finalAnswer);
 					play(correctAnswer);
 				}, 5000);
 				return setTimeout(() => {
-					document.getElementById('lets-play').classList.remove('hide');
-					document.getElementById('lets-play-text').innerHTML = 'GRATULACJE! 👑<br> WYGRAŁEŚ: 1 000 000 💵';
+					letsPlayElement.classList.remove('hide');
+					letsPlayTextElement.innerHTML = 'GRATULACJE! 👑<br> WYGRAŁEŚ: 1 000 000 💵';
 				}, 7000);
 			}
 			correctAnswer.play();
 			answerObjectHTML.classList.add('green');
 			nextStep = true;
-			document.getElementById('next-question').classList.remove('hide');
+			nextQuestionElement.classList.remove('hide');
 		}
 		else {
 			answerObjectHTML.classList.add('red');
@@ -76,14 +99,6 @@ export function checkAnswer(answerObjectHTML) {
 			gameOver();
 		}
 	});
-}
-
-export function nextQuestion() {
-	if (nextStep != true) return alert('Nie możesz przejść do następnego pytania.');
-	document.getElementById('next-question').classList.add('hide');
-	step++;
-	loadNextStep();
-	loadQuestion();
 }
 
 function loadNextStep() {
@@ -101,17 +116,25 @@ function loadNextStep() {
 		});
 	}
 
-	if (!document.getElementById('zalacznik').classList.contains('hide')) {
+	if (!zalacznikElement.classList.contains('hide')) {
 	// removing image
-		document.getElementById('zalacznik').attributes.src.textContent = '';
-		document.getElementById('zalacznik').classList.add('hide');
+		zalacznikElement.attributes.src.textContent = '';
+		zalacznikElement.classList.add('hide');
 	}
 
 	const audios = ['', playLow, playLow, playMid, playMid, playMid, playMid, playMid, play75k, playHigh, playHigh, play500k, play1m];
 	currentAudio = audios[step];
 
-	document.getElementById('steps').children[document.getElementById('steps').childElementCount - step + 1].classList.remove('check');
-	document.getElementById('steps').children[document.getElementById('steps').childElementCount - step].classList.add('check');
+	stepsElement.children[stepsElement.childElementCount - step + 1].classList.remove('check');
+	stepsElement.children[stepsElement.childElementCount - step].classList.add('check');
+}
+
+export function nextQuestion() {
+	if (nextStep != true) return alert('Nie możesz przejść do następnego pytania.');
+	nextQuestionElement.classList.add('hide');
+	step++;
+	loadNextStep();
+	loadQuestion();
 }
 
 export function getHelp(type) {
@@ -119,18 +142,18 @@ export function getHelp(type) {
 
 	if (type == 'phone') {
 		if (!availableHelp.includes('phone')) return;
-		document.getElementById('lets-play').classList.remove('hide');
-		document.getElementById('lets-play-text').innerHTML = '<button id="expert">NIE MAM PRZYJACIELA 😥 (PRZYJACIEL ROBOT)</button> <button id="friend">CHWYTAM ZA TELEFON I DZWONIĘ ☎️</button>';
+		letsPlayElement.classList.remove('hide');
+		letsPlayTextElement.innerHTML = '<button id="expert">NIE MAM PRZYJACIELA 😥 (PRZYJACIEL ROBOT)</button> <button id="friend">CHWYTAM ZA TELEFON I DZWONIĘ ☎️</button>';
 
 		// expert
 		document.getElementById('expert').onclick = () => {
 			socket.emit('phone', { id_pytania: currentID });
 			socket.once('phone', (res) => {
 				if (res.error) return console.error(`Błąd serwera! (${res.message})`);
-				document.getElementById('lets-play-text').innerHTML = res.message.toString();
-				document.getElementById('lets-play').onclick = () => {
-					confirm('Na pewno chcesz zamknąć podpowiedź?') == true ? document.getElementById('lets-play').classList.add('hide') : '';
-					document.getElementById('lets-play').onclick = null;
+				letsPlayTextElement.innerHTML = res.message.toString();
+				letsPlayElement.onclick = () => {
+					confirm('Na pewno chcesz zamknąć podpowiedź?') == true ? letsPlayElement.classList.add('hide') : '';
+					letsPlayElement.onclick = null;
 				};
 			});
 		};
@@ -138,27 +161,27 @@ export function getHelp(type) {
 		// friend
 		document.getElementById('friend').onclick = () => {
 			stop(currentAudio);
-			document.getElementById('lets-play-text').innerHTML = 'ZA CHWILĘ OTRZYMASZ MOŻLIWOŚĆ POPROSZENIA PRZYJACIELA O POMOC. <br> MASZ NA TO 30 SEKUND. <br> ZARAZ ROZPOCZNIE SIĘ ODLICZANIE.';
+			letsPlayTextElement.innerHTML = 'ZA CHWILĘ OTRZYMASZ MOŻLIWOŚĆ POPROSZENIA PRZYJACIELA O POMOC. <br> MASZ NA TO 30 SEKUND. <br> ZARAZ ROZPOCZNIE SIĘ ODLICZANIE.';
 			phonefriend.play();
 			setTimeout(() => {
 				let sec = 30;
 				const interval = setInterval(() => {
 					if (sec >= 0) {
-						document.getElementById('lets-play').ondblclick = () => {
-							document.getElementById('lets-play').classList.add('hide');
+						letsPlayElement.ondblclick = () => {
+							letsPlayElement.classList.add('hide');
 							clearInterval(interval); stop(phonefriend);
-							document.getElementById('lets-play').ondblclick = null;
+							letsPlayElement.ondblclick = null;
 						};
-						document.getElementById('lets-play-text').innerHTML = sec;
-						if (!document.getElementById('lets-play').classList.contains('phone-friend')) document.getElementById('lets-play').classList.add('phone-friend');
+						letsPlayTextElement.innerHTML = sec;
+						if (!letsPlayElement.classList.contains('phone-friend')) letsPlayElement.classList.add('phone-friend');
 						sec--;
 					}
 					else {
-						document.getElementById('lets-play-text').innerHTML = 'KONIEC CZASU';
+						letsPlayTextElement.innerHTML = 'KONIEC CZASU';
 						setTimeout(() => {
-							document.getElementById('lets-play').classList.add('hide');
+							letsPlayElement.classList.add('hide');
 							stop(phonefriend);
-							document.getElementById('lets-play').classList.remove('phone-friend');
+							letsPlayElement.classList.remove('phone-friend');
 						}, 1500);
 						clearInterval(interval);
 					}
@@ -195,12 +218,6 @@ export function getHelp(type) {
 	}
 }
 
-function gameOver() {
-	setTimeout(() => {
-		document.getElementById('lets-play').classList.remove('hide');
-		document.getElementById('lets-play-text').innerHTML = 'KONIEC GRY 😔<br><button onclick="window.location.reload();">ZAGRAJ PONOWNIE</button>';
-	}, 3000);
-}
 
 function clockRefresh(s) {
 	const timer = document.getElementById('timer');
@@ -208,7 +225,7 @@ function clockRefresh(s) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function clockStart(sec, koniec_czasu) {
+function clockStart(sec, koniecCzasu) {
 	const interval = setInterval(() => {
 		if (sec >= 0) {
 			clockRefresh(sec < 10 ? '0' + sec : sec);
@@ -216,16 +233,7 @@ function clockStart(sec, koniec_czasu) {
 		}
 		else {
 			clearInterval(interval);
-			koniec_czasu();
+			koniecCzasu();
 		}
 	}, 1000);
-}
-
-function play(audio) {
-	audio.play();
-}
-
-function stop(audio) {
-	audio.pause();
-	audio.currentTime = 0;
 }

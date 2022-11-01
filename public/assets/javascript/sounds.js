@@ -7,6 +7,6 @@ export const play75k = new Audio('./assets/sounds/play_guarant.mp3');
 export const play500k = new Audio('./assets/sounds/play_half_milion.mp3');
 export const play1m = new Audio('./assets/sounds/play_milion.mp3');
 export const correctAnswer = new Audio('./assets/sounds/correct_answer.mp3');
-export const final_answer = new Audio('./assets/sounds/final_answer.mp3');
+export const finalAnswer = new Audio('./assets/sounds/final_answer.mp3');
 export const wrongAnswer = new Audio('./assets/sounds/wrong_answer.mp3');
 export const phonefriend = new Audio('./assets/sounds/phone_a_friend.mp3');

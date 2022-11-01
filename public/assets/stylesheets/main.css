@@ -21,6 +21,7 @@ body {
 	background: var(--blue);
 	background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(39,50,124,1) 50%, rgba(9,9,121,1) 100%);
 	color: white;
+	overflow-x: hidden;
 }
 
 #main-container {
