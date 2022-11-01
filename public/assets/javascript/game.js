@@ -8,7 +8,8 @@ import { start, letsPlay } from './sounds.js';
 import { loadQuestion, checkAnswer, getHelp, nextQuestion } from './functions.js';
 
 // setup socket connection
-import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js';
+import '/socket.io/socket.io.min.js';
+// eslint-disable-next-line no-undef
 export const socket = io();
 
 socket.on('connect', () => {
@@ -16,8 +17,10 @@ socket.on('connect', () => {
 });
 
 socket.on('disconnect', () => {
-	if (!socket.connected) {console.log('Rozłączono z serwerem!');}
-	alert('Rozłączono z serwerem!');
+	if (!socket.connected) {
+		console.log('Rozłączono z serwerem!');
+		alert('Rozłączono z serwerem!');
+	}
 });
 
 // wait for interraction
