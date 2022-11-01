@@ -18,5 +18,8 @@
     "multicast-dns": "^7.2.5",
     "nodemon": "^2.0.20",
     "socket.io": "^4.5.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.26.0"
   }
 }
