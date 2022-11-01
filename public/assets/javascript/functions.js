@@ -1,10 +1,10 @@
-import { socket } from './game.js'
+import { socket } from './game.js';
 import { playLow, wrongAnswer, correctAnswer, playMid, playHigh, play75k, play500k, play1m, final_answer, phonefriend } from './sounds.js';
 
-var currentID, help, nextStep;
-var availableHelp = ['half', 'phone', 'public'];
-var step = 1;
-var currentAudio = playLow;
+let currentID, help, nextStep;
+let availableHelp = ['half', 'phone', 'public'];
+let step = 1;
+let currentAudio = playLow;
 
 function putQuestionDataIntoHTML(pytanie, odpa, odpb, odpc, odpd, zalacznik) {
 	if (!pytanie || !odpa || !odpb || !odpc || !odpd) return console.error('Nie podano wystarczającej liczby danych!');
@@ -15,7 +15,7 @@ function putQuestionDataIntoHTML(pytanie, odpa, odpb, odpc, odpd, zalacznik) {
 	const c = document.getElementById('odpc');
 	const d = document.getElementById('odpd');
 	const o = document.getElementById('zalacznik');
-  
+
 	q.innerText = pytanie;
 	a.innerText = odpa;
 	b.innerText = odpb;
@@ -27,9 +27,9 @@ function putQuestionDataIntoHTML(pytanie, odpa, odpb, odpc, odpd, zalacznik) {
 		o.classList.remove('hide');
 	}
 }
-  
+
 export function loadQuestion() {
-	socket.emit('question') // get question from server
+	socket.emit('question');
 	socket.once('question', (res) => {
 		if (res.error) return console.error(`Błąd serwera! (${res.message})`);
 		putQuestionDataIntoHTML(res.tresc, res.odpowiedz_a, res.odpowiedz_b, res.odpowiedz_c, res.odpowiedz_d, res.zalacznik);
@@ -37,8 +37,8 @@ export function loadQuestion() {
 		help = true;
 		nextStep = false;
 		play(currentAudio);
-		console.log('Pytanie zostało pobrane z bazy danych!')
-	})
+		console.log('Pytanie zostało pobrane z bazy danych!');
+	});
 }
 
 export function checkAnswer(answerObjectHTML) {
@@ -53,14 +53,22 @@ export function checkAnswer(answerObjectHTML) {
 			stop(currentAudio);
 			if (step == 12) {
 				play(final_answer);
-				setTimeout(() => { answerObjectHTML.classList.add('green'); stop(final_answer); play(correctAnswer)}, 5000);
-				return setTimeout(() => { document.getElementById('lets-play').classList.remove('hide'); document.getElementById('lets-play-text').innerHTML = 'GRATULACJE! 👑<br> WYGRAŁEŚ: 1 000 000 💵'; }, 7000);
+				setTimeout(() => {
+					answerObjectHTML.classList.add('green');
+					stop(final_answer);
+					play(correctAnswer);
+				}, 5000);
+				return setTimeout(() => {
+					document.getElementById('lets-play').classList.remove('hide');
+					document.getElementById('lets-play-text').innerHTML = 'GRATULACJE! 👑<br> WYGRAŁEŚ: 1 000 000 💵';
+				}, 7000);
 			}
-			correctAnswer.play(); 
+			correctAnswer.play();
 			answerObjectHTML.classList.add('green');
 			nextStep = true;
 			document.getElementById('next-question').classList.remove('hide');
-		} else {
+		}
+		else {
 			answerObjectHTML.classList.add('red');
 			document.getElementById(`odp${res.good_answer.toLowerCase()}`).classList.add('green');
 			stop(currentAudio);
@@ -95,7 +103,7 @@ function loadNextStep() {
 
 	if (!document.getElementById('zalacznik').classList.contains('hide')) {
 	// removing image
-	document.getElementById('zalacznik').attributes.src.textContent = '';
+		document.getElementById('zalacznik').attributes.src.textContent = '';
 		document.getElementById('zalacznik').classList.add('hide');
 	}
 
@@ -108,47 +116,60 @@ function loadNextStep() {
 
 export function getHelp(type) {
 	if (help == false || !type) return;
-	
+
 	if (type == 'phone') {
 		if (!availableHelp.includes('phone')) return;
 		document.getElementById('lets-play').classList.remove('hide');
-		document.getElementById('lets-play-text').innerHTML = `<button id="expert">NIE MAM PRZYJACIELA 😥 (PRZYJACIEL ROBOT)</button> <button id="friend">CHWYTAM ZA TELEFON I DZWONIĘ ☎️</button>`;
+		document.getElementById('lets-play-text').innerHTML = '<button id="expert">NIE MAM PRZYJACIELA 😥 (PRZYJACIEL ROBOT)</button> <button id="friend">CHWYTAM ZA TELEFON I DZWONIĘ ☎️</button>';
 
 		// expert
-		document.getElementById('expert').onclick = x => {
+		document.getElementById('expert').onclick = () => {
 			socket.emit('phone', { id_pytania: currentID });
 			socket.once('phone', (res) => {
 				if (res.error) return console.error(`Błąd serwera! (${res.message})`);
 				document.getElementById('lets-play-text').innerHTML = res.message.toString();
-				document.getElementById('lets-play').onclick = y => { confirm("Na pewno chcesz zamknąć podpowiedź?") == true ? document.getElementById('lets-play').classList.add('hide'):'';document.getElementById('lets-play').onclick = null; }
+				document.getElementById('lets-play').onclick = () => {
+					confirm('Na pewno chcesz zamknąć podpowiedź?') == true ? document.getElementById('lets-play').classList.add('hide') : '';
+					document.getElementById('lets-play').onclick = null;
+				};
 			});
-		}
+		};
 
-		//friend
-		document.getElementById('friend').onclick = x => {
+		// friend
+		document.getElementById('friend').onclick = () => {
 			stop(currentAudio);
 			document.getElementById('lets-play-text').innerHTML = 'ZA CHWILĘ OTRZYMASZ MOŻLIWOŚĆ POPROSZENIA PRZYJACIELA O POMOC. <br> MASZ NA TO 30 SEKUND. <br> ZARAZ ROZPOCZNIE SIĘ ODLICZANIE.';
-			phonefriend.play()
+			phonefriend.play();
 			setTimeout(() => {
 				let sec = 30;
-				let interval = setInterval(() => { 
+				const interval = setInterval(() => {
 					if (sec >= 0) {
-						document.getElementById('lets-play').ondblclick = y => { document.getElementById('lets-play').classList.add('hide'); clearInterval(interval); stop(phonefriend);document.getElementById('lets-play').ondblclick = null};
+						document.getElementById('lets-play').ondblclick = () => {
+							document.getElementById('lets-play').classList.add('hide');
+							clearInterval(interval); stop(phonefriend);
+							document.getElementById('lets-play').ondblclick = null;
+						};
 						document.getElementById('lets-play-text').innerHTML = sec;
 						if (!document.getElementById('lets-play').classList.contains('phone-friend')) document.getElementById('lets-play').classList.add('phone-friend');
-						sec--
-					} else {
+						sec--;
+					}
+					else {
 						document.getElementById('lets-play-text').innerHTML = 'KONIEC CZASU';
-						setTimeout(x => { document.getElementById('lets-play').classList.add('hide'); stop(phonefriend); document.getElementById('lets-play').classList.remove('phone-friend') }, 1500);
+						setTimeout(() => {
+							document.getElementById('lets-play').classList.add('hide');
+							stop(phonefriend);
+							document.getElementById('lets-play').classList.remove('phone-friend');
+						}, 1500);
 						clearInterval(interval);
 					}
-				}, 1000)
-			}, 11000)
-		}
-		
+				}, 1000);
+			}, 11000);
+		};
+
 		availableHelp = availableHelp.filter(x => x != 'phone');
 		document.getElementById('phone').classList.add('disabled');
-	} else if (type == 'half') {
+	}
+	else if (type == 'half') {
 		if (!availableHelp.includes('half')) return;
 		socket.emit('half', { id_pytania: currentID });
 		socket.once('half', (res) => {
@@ -160,40 +181,44 @@ export function getHelp(type) {
 			document.getElementById('half').classList.add('disabled');
 			console.log('Odrzucono dwie niepoprawne odpowiedzi.');
 		});
-	} else if (type == 'public') {
+	}
+	else if (type == 'public') {
 		if (!availableHelp.includes('public')) return;
 
 		loadQuestion();
 
-		document.getElementById('voting').classList.add('disabled')
+		document.getElementById('voting').classList.add('disabled');
 		availableHelp = availableHelp.filter(x => x != 'public');
-	} else {
+	}
+	else {
 		console.error('Podano nieprawidłowy typ koła ratunkowego!');
 	}
 }
 
 function gameOver() {
 	setTimeout(() => {
-		document.getElementById('lets-play').classList.remove('hide')
+		document.getElementById('lets-play').classList.remove('hide');
 		document.getElementById('lets-play-text').innerHTML = 'KONIEC GRY 😔<br><button onclick="window.location.reload();">ZAGRAJ PONOWNIE</button>';
-	}, 3000)
+	}, 3000);
 }
 
 function clockRefresh(s) {
-	let timer = document.getElementById('timer');
+	const timer = document.getElementById('timer');
 	timer.innerHTML = s;
 }
-  
+
+// eslint-disable-next-line no-unused-vars
 function clockStart(sec, koniec_czasu) {
-	let interval = setInterval(() => { 
+	const interval = setInterval(() => {
 		if (sec >= 0) {
 			clockRefresh(sec < 10 ? '0' + sec : sec);
-			sec--
-	  	} else {
+			sec--;
+		}
+		else {
 			clearInterval(interval);
 			koniec_czasu();
-	  	}
-	}, 1000)
+		}
+	}, 1000);
 }
 
 function play(audio) {

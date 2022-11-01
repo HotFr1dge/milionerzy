@@ -1,4 +1,7 @@
-let pytania = [];
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+
+const pytania = [];
 
 function test() {
 	loadquestion();
@@ -13,7 +16,8 @@ function test() {
 
 		if (document.getElementsByClassName('obrazek').length == 0) {
 			obrazek = null;
-		} else {
+		}
+		else {
 			obrazek = document
 				.getElementsByClassName('obrazek')[0]
 				.children[0].getAttribute('src')
@@ -40,6 +44,6 @@ function test() {
 	}, 1000);
 }
 
-let internal = setInterval(() => {
+const internal = setInterval(() => {
 	test();
 }, 3000);
