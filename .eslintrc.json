@@ -6,12 +6,13 @@
         "browser": true
 	},
 	"parserOptions": {
-		"ecmaVersion": 2021,
+		"ecmaVersion": 2022,
         "sourceType": "module"
 	},
 	"rules": {
 		"arrow-spacing": ["warn", { "before": true, "after": true }],
 		"brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
+		"camelcase": ["warn", { "properties": "never" }],
 		"comma-dangle": ["error", "always-multiline"],
 		"comma-spacing": "error",
 		"comma-style": "error",
@@ -22,15 +23,19 @@
 		"keyword-spacing": "error",
 		"max-nested-callbacks": ["error", { "max": 4 }],
 		"max-statements-per-line": ["error", { "max": 2 }],
+		"no-compare-neg-zero": "error",
 		"no-console": "off",
+		"no-const-assign": "error",
 		"no-empty-function": "error",
 		"no-floating-decimal": "error",
 		"no-inline-comments": "error",
+		"no-irregular-whitespace": "error",
 		"no-lonely-if": "error",
 		"no-multi-spaces": "error",
 		"no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1, "maxBOF": 0 }],
 		"no-shadow": ["error", { "allow": ["err", "resolve", "reject"] }],
 		"no-trailing-spaces": ["error"],
+		"no-use-before-define": "error",
 		"no-var": "error",
 		"object-curly-spacing": ["error", "always"],
 		"prefer-const": "error",
@@ -47,5 +52,6 @@
 		"space-unary-ops": "error",
 		"spaced-comment": "error",
 		"yoda": "error"
+		
 	}
 }
