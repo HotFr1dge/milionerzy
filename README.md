@@ -20,3 +20,6 @@ Project has been created in node.js environment with the SQLite database and Web
  3. Change server settings in `.env` file (optional)
  4. Run server by `npm start` command.
  5. Open web browser and type your local IP address or domain name (default: [milionerzy.local](http://milionerzy.local))
+
+ #### Screenshot
+ ![screenshot](https://repository-images.githubusercontent.com/559656274/14154eb0-e187-41b4-aa12-52a8678d95b9)
