@@ -1,6 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 
+/*
+ * Skypt do zbierania pytań z egzamin-informatyk.pl
+ */
+
 const pytania = [];
 
 function test() {
