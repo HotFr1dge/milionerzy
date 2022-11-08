@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT || 8080;
-const hostname = process.env.DOMAIN.endsWith('.local') ? process.env.DOMAIN : process.env.DOMAIN + '.local' || 'milionerzy.local';
+const hostname = process.env.DOMAIN && process.env.DOMAIN.endsWith('.local') ? process.env.DOMAIN : process.env.DOMAIN + '.local' || 'milionerzy.local';
 
 // use express on web server
 const httpServer = createServer(app);
