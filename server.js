@@ -56,7 +56,7 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('half', (req) => {
-		if (!req.id_pytania) return socket.emit('answer', { error: true, message: 'Nie przesłano wszystkich wymaganych danych.' });
+		if (!req.id_pytania) return socket.emit('half', { error: true, message: 'Nie przesłano wszystkich wymaganych danych.' });
 
 		const rightAnswer = db.prepare('SELECT prawidlowa FROM odpowiedzi WHERE id_pytania = ?').get(req.id_pytania);
 
@@ -69,7 +69,7 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('phone', (req) => {
-		if (!req.id_pytania) return socket.emit('answer', { error: true, message: 'Nie przesłano wszystkich wymaganych danych.' });
+		if (!req.id_pytania) return socket.emit('phone', { error: true, message: 'Nie przesłano wszystkich wymaganych danych.' });
 
 		const rightAnswer = db.prepare('SELECT prawidlowa FROM odpowiedzi WHERE id_pytania = ?').get(req.id_pytania);
 
