@@ -25,6 +25,8 @@ const io = new Server(httpServer);
 io.on('connection', (socket) => {
 	console.log(`Klient połączony! (${socket.handshake.address.split(':').reverse()[0]})`);
 
+	socket.emit('cheaterDetection', { cheaterDetection: process.env.CHEATER_DETECTION === 'true' ? true : false });
+
 	// response question data when client emmit 'question' event
 	socket.on('question', () => {
 

@@ -1,11 +1,11 @@
 const overlay = document.getElementById('overlay');
 const gameRules = document.getElementById('game-rules');
-
+let cheaterDetection;
 // import sounds
 import { start, letsPlay } from './sounds.js';
 
 // import functions
-import { loadQuestion, checkAnswer, getHelp, nextQuestion } from './functions.js';
+import { loadQuestion, checkAnswer, getHelp, nextQuestion, checkMouse } from './functions.js';
 
 // setup socket connection
 import '/socket.io/socket.io.min.js';
@@ -14,6 +14,10 @@ export const socket = io();
 
 socket.on('connect', () => {
 	console.log('Połączono z serwerem!');
+});
+
+socket.on('cheaterDetection', (req) => {
+	cheaterDetection = req.cheaterDetection;
 });
 
 socket.on('disconnect', () => {
@@ -53,6 +57,7 @@ gameRules.addEventListener('click', () => {
 	setTimeout(() => {
 		letsPlayOverlay.classList.add('hide');
 		loadQuestion();
+		checkMouse(cheaterDetection);
 	}, 3000);
 });
 
