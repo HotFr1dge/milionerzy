@@ -84,8 +84,8 @@ export function checkAnswer(answerObjectHTML) {
 		currentID = null;
 		if (res.correct == true) {
 			// next question
-			stop(currentAudio);
 			if (step == 12) {
+				stop(currentAudio);
 				play(finalAnswer);
 				answerObjectHTML.classList.add('selected');
 				setTimeout(() => {
@@ -102,6 +102,7 @@ export function checkAnswer(answerObjectHTML) {
 			}
 			answerObjectHTML.classList.add('selected');
 			setTimeout(() => {
+				stop(currentAudio);
 				correctAnswer.play();
 				answerObjectHTML.classList.remove('selected');
 				answerObjectHTML.classList.add('green');
