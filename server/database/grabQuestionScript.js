@@ -7,11 +7,14 @@
 
 const pytania = [];
 
-function test() {
+function scrapQuestion() {
 	loadquestion();
 
 	setTimeout(() => {
 		const q = document.getElementsByClassName('tresc')[0].innerText;
+
+		if (pytania.find(x => x.pytanie === q)) return console.log('Pytanie odzucone.');
+
 		const odp = document.getElementById('odpa').innerText;
 		const odpa = document.getElementById('odpb').innerText;
 		const odpb = document.getElementById('odpc').innerText;
@@ -27,19 +30,19 @@ function test() {
 				.children[0].getAttribute('src')
 				.replace('../', 'https://egzamin-informatyk.pl/');
 		}
-		let god;
+		let good;
 
 		document.getElementById('odpa').click();
 
 		setTimeout(() => {
-			god = document.getElementsByClassName('odpgood')[0].children[0].innerHTML.replace('. ', '');
+			good = document.getElementsByClassName('odpgood')[0].children[0].innerHTML.replace('. ', '');
 			pytania.push({
 				pytanie: q,
 				odpowiedz_a: odp,
 				odpowiedz_b: odpa,
 				odpowiedz_c: odpb,
 				odpowiedz_d: odpc,
-				prawidlowa: god,
+				prawidlowa: good,
 				załacznik: obrazek,
 			});
 			console.log(pytania.length);
@@ -48,6 +51,6 @@ function test() {
 	}, 1000);
 }
 
-const internal = setInterval(() => {
-	test();
+const interval = setInterval(() => {
+	scrapQuestion();
 }, 3000);
