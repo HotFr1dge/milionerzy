@@ -23,9 +23,16 @@ const { Server } = require('socket.io');
 const io = new Server(httpServer);
 
 io.on('connection', (socket) => {
-	console.log(`Klient połączony! (${socket.handshake.address.split(':').reverse()[0]})`);
+	console.log(`Klient połączony. (${socket.handshake.address.split(':').reverse()[0]})`);
 
 	socket.emit('cheaterDetection', { cheaterDetection: process.env.CHEATER_DETECTION === 'true' ? true : false });
+	socket.on('gameover', (res) => {
+		console.log(`Klient skończył grę! (${socket.handshake.address.split(':').reverse()[0]}) - Liczba prawidłowych odpowiedzi: ${res.step}, Wykorzystane koła: ${3 - res.availableHelp.length}, Licznik zmian skupienia: ${res.changeingFocusCounter}`);
+	});
+
+	socket.on('win', (res) => {
+		console.log(`Klient wygrał grę! (${socket.handshake.address.split(':').reverse()[0]}) - Wykorzystane koła: ${3 - res.availableHelp.length}, Licznik zmian skupienia: ${res.changeingFocusCounter}`);
+	});
 
 	// response question data when client emmit 'question' event
 	socket.on('question', () => {

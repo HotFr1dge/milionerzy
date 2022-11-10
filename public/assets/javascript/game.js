@@ -5,7 +5,7 @@ let cheaterDetection;
 import { start, letsPlay } from './sounds.js';
 
 // import functions
-import { loadQuestion, checkAnswer, getHelp, nextQuestion, checkMouse } from './functions.js';
+import { loadQuestion, checkAnswer, getHelp, nextQuestion, detectCheating } from './functions.js';
 
 // setup socket connection
 import '/socket.io/socket.io.min.js';
@@ -57,7 +57,7 @@ gameRules.addEventListener('click', () => {
 	setTimeout(() => {
 		letsPlayOverlay.classList.add('hide');
 		loadQuestion();
-		checkMouse(cheaterDetection);
+		detectCheating(cheaterDetection);
 	}, 3000);
 });
 

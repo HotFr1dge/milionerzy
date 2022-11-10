@@ -5,6 +5,7 @@ let currentID, help, nextStep;
 let availableHelp = ['half', 'phone', 'public'];
 let step = 1;
 let currentAudio = playLow;
+let changeingFocusCounter = 0;
 
 // HTMLElements
 const letsPlayElement = document.getElementById('lets-play');
@@ -65,21 +66,13 @@ function gameOver(time = 3000) {
 	setTimeout(() => {
 		letsPlayElement.classList.remove('hide');
 		letsPlayTextElement.innerHTML = 'KONIEC GRY 😔<br><button onclick="window.location.reload();">ZAGRAJ PONOWNIE</button>';
+		socket.emit('gameover', { step: step, availableHelp: availableHelp, changeingFocusCounter: changeingFocusCounter });
 	}, time);
 }
 
-export function checkMouse(bool) {
+export function detectCheating(bool) {
 	if (bool === false) return;
-	let cheater = false;
-	document.addEventListener('mouseleave', (event) => {
-		if (cheater) return;
-		if (event.clientY <= 0 || event.clientX <= 0 || (event.clientX >= window.innerWidth || event.clientY >= window.innerHeight)) {
-			cheater = true;
-			stop(currentAudio);
-			play(wrongAnswer);
-			gameOver(0);
-		}
-	});
+	window.onblur = () => changeingFocusCounter++;
 }
 
 export function checkAnswer(answerObjectHTML) {
@@ -102,6 +95,7 @@ export function checkAnswer(answerObjectHTML) {
 				return setTimeout(() => {
 					letsPlayElement.classList.remove('hide');
 					letsPlayTextElement.innerHTML = 'GRATULACJE! 👑<br> WYGRAŁEŚ: 1 000 000 💵';
+					socket.emit('win', { availableHelp: availableHelp, changeingFocusCounter: changeingFocusCounter });
 				}, 7000);
 			}
 			correctAnswer.play();
@@ -189,6 +183,7 @@ export function getHelp(type) {
 							letsPlayElement.classList.add('hide');
 							clearInterval(interval); stop(phonefriend);
 							letsPlayElement.ondblclick = null;
+							if (!letsPlayElement.classList.contains('phone-friend')) letsPlayElement.classList.add('phone-friend');
 						};
 						letsPlayTextElement.innerHTML = sec;
 						if (!letsPlayElement.classList.contains('phone-friend')) letsPlayElement.classList.add('phone-friend');
