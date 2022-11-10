@@ -100,6 +100,15 @@ body {
 	cursor: pointer;
 }
 
+#voting, .answear, #phone, #half {
+	border: 3px solid transparent;
+	transition: all 0.3s;
+}
+
+#voting:hover, .answear:hover, #phone:hover, #half:hover {
+	border: 3px solid rgb(211, 211, 211);
+}
+
 .selected {
 	border: 3px solid white;
 	color: var(--orange);
@@ -209,6 +218,10 @@ button {
 .disabled {
 	background-color: var(--grey)!important;
 	cursor: not-allowed!important;
+}
+
+.disabled:hover {
+	border: 3px solid transparent!important;
 }
 
 #next-question {

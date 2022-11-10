@@ -87,7 +87,9 @@ export function checkAnswer(answerObjectHTML) {
 			stop(currentAudio);
 			if (step == 12) {
 				play(finalAnswer);
+				answerObjectHTML.classList.add('selected');
 				setTimeout(() => {
+					answerObjectHTML.classList.remove('selected');
 					answerObjectHTML.classList.add('green');
 					stop(finalAnswer);
 					play(correctAnswer);
@@ -98,17 +100,25 @@ export function checkAnswer(answerObjectHTML) {
 					socket.emit('win', { availableHelp: availableHelp, changeingFocusCounter: changeingFocusCounter });
 				}, 7000);
 			}
-			correctAnswer.play();
-			answerObjectHTML.classList.add('green');
-			nextStep = true;
-			nextQuestionElement.classList.remove('hide');
+			answerObjectHTML.classList.add('selected');
+			setTimeout(() => {
+				correctAnswer.play();
+				answerObjectHTML.classList.remove('selected');
+				answerObjectHTML.classList.add('green');
+				nextStep = true;
+				nextQuestionElement.classList.remove('hide');
+			}, 1000);
 		}
 		else {
-			answerObjectHTML.classList.add('red');
-			document.getElementById(`odp${res.good_answer.toLowerCase()}`).classList.add('green');
-			stop(currentAudio);
-			play(wrongAnswer);
-			gameOver();
+			answerObjectHTML.classList.add('selected');
+			setTimeout(() => {
+				answerObjectHTML.classList.remove('selected');
+				answerObjectHTML.classList.add('red');
+				document.getElementById(`odp${res.good_answer.toLowerCase()}`).classList.add('green');
+				stop(currentAudio);
+				play(wrongAnswer);
+				gameOver();
+			}, 1000);
 		}
 	});
 }
