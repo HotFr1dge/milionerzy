@@ -102,6 +102,25 @@ io.on('connection', (socket) => {
 
 });
 
+// set up middleware
+const JavaScriptObfuscator = require('javascript-obfuscator');
+const fs = require('fs');
+
+function obfuscateMiddleware(req, res, next) {
+	if (!req.originalUrl.endsWith('.js')) return next();
+
+	let fileContent;
+	try {
+		fileContent = fs.readFileSync('./public' + req.originalUrl, 'utf8');
+	}
+	catch (err) {
+		console.error(err);
+	}
+	res.set('Content-Type', 'text/javascript');
+	res.send(JavaScriptObfuscator.obfuscate(fileContent).getObfuscatedCode());
+}
+app.use(obfuscateMiddleware);
+
 // share files from a public directory
 app.use(express.static('public'));
 
