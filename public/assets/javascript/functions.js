@@ -5,6 +5,7 @@ let currentID, help, nextStep;
 let availableHelp = ['half', 'phone', 'public'];
 let step = 1;
 let currentAudio = playLow;
+let changeingFocusCounter = 0;
 
 // HTMLElements
 const letsPlayElement = document.getElementById('lets-play');
@@ -42,6 +43,10 @@ function putQuestionDataIntoHTML(pytanie, odpa, odpb, odpc, odpd, zalacznik) {
 		o.attributes.src.textContent = zalacznik;
 		o.classList.remove('hide');
 	}
+	else {
+		o.attributes.src.textContent = '';
+		o.classList.add('hide');
+	}
 }
 
 export function loadQuestion() {
@@ -57,11 +62,17 @@ export function loadQuestion() {
 	});
 }
 
-function gameOver() {
+function gameOver(time = 3000) {
 	setTimeout(() => {
 		letsPlayElement.classList.remove('hide');
 		letsPlayTextElement.innerHTML = 'KONIEC GRY 😔<br><button onclick="window.location.reload();">ZAGRAJ PONOWNIE</button>';
-	}, 3000);
+		socket.emit('gameover', { step: step, availableHelp: availableHelp, changeingFocusCounter: changeingFocusCounter });
+	}, time);
+}
+
+export function detectCheating(bool) {
+	if (bool === false) return;
+	window.onblur = () => changeingFocusCounter++;
 }
 
 export function checkAnswer(answerObjectHTML) {
@@ -73,10 +84,12 @@ export function checkAnswer(answerObjectHTML) {
 		currentID = null;
 		if (res.correct == true) {
 			// next question
-			stop(currentAudio);
 			if (step == 12) {
+				stop(currentAudio);
 				play(finalAnswer);
+				answerObjectHTML.classList.add('selected');
 				setTimeout(() => {
+					answerObjectHTML.classList.remove('selected');
 					answerObjectHTML.classList.add('green');
 					stop(finalAnswer);
 					play(correctAnswer);
@@ -84,19 +97,29 @@ export function checkAnswer(answerObjectHTML) {
 				return setTimeout(() => {
 					letsPlayElement.classList.remove('hide');
 					letsPlayTextElement.innerHTML = 'GRATULACJE! 👑<br> WYGRAŁEŚ: 1 000 000 💵';
+					socket.emit('win', { availableHelp: availableHelp, changeingFocusCounter: changeingFocusCounter });
 				}, 7000);
 			}
-			correctAnswer.play();
-			answerObjectHTML.classList.add('green');
-			nextStep = true;
-			nextQuestionElement.classList.remove('hide');
+			answerObjectHTML.classList.add('selected');
+			setTimeout(() => {
+				stop(currentAudio);
+				correctAnswer.play();
+				answerObjectHTML.classList.remove('selected');
+				answerObjectHTML.classList.add('green');
+				nextStep = true;
+				nextQuestionElement.classList.remove('hide');
+			}, 1000);
 		}
 		else {
-			answerObjectHTML.classList.add('red');
-			document.getElementById(`odp${res.good_answer.toLowerCase()}`).classList.add('green');
-			stop(currentAudio);
-			play(wrongAnswer);
-			gameOver();
+			answerObjectHTML.classList.add('selected');
+			setTimeout(() => {
+				answerObjectHTML.classList.remove('selected');
+				answerObjectHTML.classList.add('red');
+				document.getElementById(`odp${res.good_answer.toLowerCase()}`).classList.add('green');
+				stop(currentAudio);
+				play(wrongAnswer);
+				gameOver();
+			}, 1000);
 		}
 	});
 }
@@ -171,6 +194,7 @@ export function getHelp(type) {
 							letsPlayElement.classList.add('hide');
 							clearInterval(interval); stop(phonefriend);
 							letsPlayElement.ondblclick = null;
+							if (!letsPlayElement.classList.contains('phone-friend')) letsPlayElement.classList.add('phone-friend');
 						};
 						letsPlayTextElement.innerHTML = sec;
 						if (!letsPlayElement.classList.contains('phone-friend')) letsPlayElement.classList.add('phone-friend');

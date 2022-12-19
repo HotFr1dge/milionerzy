@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT || 8080;
-const hostname = process.env.DOMAIN && process.env.DOMAIN.endsWith('.local') ? process.env.DOMAIN : 'milionerzy.local';
+const hostname = process.env.DOMAIN?.endsWith('.local') && process.env.DOMAIN || 'milionerzy.local';
 
 // use express on web server
 const httpServer = createServer(app);
@@ -23,7 +23,16 @@ const { Server } = require('socket.io');
 const io = new Server(httpServer);
 
 io.on('connection', (socket) => {
-	console.log(`Klient połączony! (${socket.handshake.address.split(':').reverse()[0]})`);
+	console.log(`Klient połączony. (${socket.handshake.address.split(':').reverse()[0]})`);
+
+	socket.emit('cheaterDetection', { cheaterDetection: process.env.CHEATER_DETECTION === 'true' ? true : false });
+	socket.on('gameover', (res) => {
+		console.log(`Klient skończył grę! (${socket.handshake.address.split(':').reverse()[0]}) - Liczba prawidłowych odpowiedzi: ${res.step}, Wykorzystane koła: ${3 - res.availableHelp.length}, Licznik zmian skupienia: ${res.changeingFocusCounter}`);
+	});
+
+	socket.on('win', (res) => {
+		console.log(`Klient wygrał grę! (${socket.handshake.address.split(':').reverse()[0]}) - Wykorzystane koła: ${3 - res.availableHelp.length}, Licznik zmian skupienia: ${res.changeingFocusCounter}`);
+	});
 
 	// response question data when client emmit 'question' event
 	socket.on('question', () => {
@@ -99,6 +108,25 @@ io.on('connection', (socket) => {
 	});
 
 });
+
+// set up middleware
+const JavaScriptObfuscator = require('javascript-obfuscator');
+const fs = require('fs');
+
+function obfuscateMiddleware(req, res, next) {
+	if (!req.originalUrl.endsWith('.js')) return next();
+
+	let fileContent;
+	try {
+		fileContent = fs.readFileSync('./public' + req.originalUrl, 'utf8');
+	}
+	catch (err) {
+		console.error(err);
+	}
+	res.set('Content-Type', 'text/javascript');
+	res.send(JavaScriptObfuscator.obfuscate(fileContent).getObfuscatedCode());
+}
+app.use(obfuscateMiddleware);
 
 // share files from a public directory
 app.use(express.static('public'));
